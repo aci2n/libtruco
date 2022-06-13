@@ -49,11 +49,11 @@ enum truco_card {
 };
 
 struct truco_card_def {
-  truco_card const card;
   size_t const power;
+  char const*const name;
 };
 
-#define TRUCO_CARD_DEF(CARD, POWER) { .card = (CARD)+0, .power = (POWER)+0 }
+#define TRUCO_CARD_DEF(CARD, POWER) [(CARD)+0] = { .power = (POWER)+0, .name = "" #CARD "" }
 
 truco_card_def const truco_cards[] = {
   TRUCO_CARD_DEF(swords_1, 100),

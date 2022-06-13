@@ -33,34 +33,18 @@ struct truco_state {
   size_t current_round;
   truco_round round;
   truco_choices choices;
+  truco_card deck[truco_card_num];
 };
 
 static
-void truco_init(truco_state* state, size_t const players) {
-  *state = (truco_state){
-    .players = players,
-    .choices = (truco_choices){
-      .values = {start_round},
-      .size = 1,
-    }
-  };
-}
-
-static
 void truco_deal_hands(truco_state* state) {
-  int deck[truco_card_num];
-
-  for (size_t i = 0; i < truco_card_num; i++) {
-    deck[i] = i;
-  }
-
-  truco_shuffle(truco_card_num, deck);
+  truco_shuffle(truco_card_num, (int*)state->deck);
 
   for (size_t i = 0; i < state->players * TRUCO_HAND_SIZE; i++) {
     size_t player = i % state->players;
     size_t card = i / state->players;
     state->round.hands[player][card] = (truco_playable_card){
-      .card = deck[i],
+      .card = state->deck[i],
       .played = false
     };
   }
@@ -68,41 +52,77 @@ void truco_deal_hands(truco_state* state) {
 
 static
 void truco_start_round(truco_state* state) {
-  state->current_player = state->current_round % state->players;
-  state->current_round++;
-  state->round = (truco_round){0};
   truco_deal_hands(state);
   state->choices = (truco_choices){
+    .size = 6,
     .values = {play_first, play_second, play_third, call_envido, call_truco, surrender},
-    .size = 6
   };
 }
 
+static
+void truco_start_game(truco_state* state, size_t const players) {
+  *state = (truco_state){.players = players};
+  for (size_t i = 0; i < truco_card_num; i++) {
+    state->deck[i] = i;
+  }
+  truco_start_round(state);
+}
+
+static
+void truco_advance_round(truco_state* state) {
+  state->current_round++;
+  state->current_player = state->current_round % state->players;
+  state->round = (truco_round){0};
+  truco_start_round(state);
+}
+
 void truco_dump(truco_state* state) {
-  printf("{\n"
-      "Players: %lu\n"
-      "Score: %lu - %lu\n"
-      "Current player: %lu\n"
-      "Current round: %lu\n"
-      "}\n",
-      state->players,
-      state->score[0], state->score[1],
-      state->current_player,
-      state->current_round);
+  printf("{\n");
+  printf(" Players: %lu\n", state->players);
+  printf(" Score: %lu - %lu\n", state->score[0], state->score[1]);
+  printf(" Current player: %lu\n", state->current_player);
+  printf(" Current round: %lu {\n", state->current_round);
+
+  truco_round round = state->round;
+
+  printf("  Score: %lu - %lu\n", round.score[0], round.score[1]);
+
+  for (size_t i = 0; i < state->players; i++) {
+    truco_playable_card* hand = round.hands[i];
+    printf("  Player %lu: [ ", i);
+
+    for (size_t j = 0; j < TRUCO_HAND_SIZE; j++) {
+      truco_playable_card playable = hand[j];
+      truco_card_def def = truco_cards[playable.card];
+      printf("%s ", def.name);
+    }
+
+    printf("]\n");
+  }
+
+  printf("  Stack: [ ");
+  for (size_t i = 0; i < round.stack_size; i++) {
+    truco_card_def def = truco_cards[round.stack[i]];
+    printf("%s ", def.name);
+  }
+  printf("]\n");
+
+  printf(" }\n");
+  printf("}\n");
 };
 
 void truco_dispatch(truco_state* state, truco_command const command) {
   if (!state) return;
 
   switch (command) {
-    case init_two:
-    case init_four:
-    case init_six:
-      truco_init(state, 2 * (command + 1));
+    case start_game_two:
+    case start_game_four:
+    case start_game_six:
+      truco_start_game(state, 2 * (command + 1));
       break;
 
-    case start_round:
-      truco_start_round(state);
+    case advance_round:
+      truco_advance_round(state);
       break;
   }
 }
