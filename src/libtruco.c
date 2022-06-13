@@ -12,34 +12,37 @@
 #define TRUCO_MAX_CHOICES 128
 
 typedef struct truco_round truco_round;
+typedef struct truco_choices truco_choices;
 
 struct truco_round {
   size_t score[TRUCO_MAX_TEAMS];
-
   truco_playable_card hands[TRUCO_MAX_PLAYERS][TRUCO_HAND_SIZE];
-
   size_t stack_size;
   truco_card stack[TRUCO_MAX_PLAYERS * TRUCO_HAND_SIZE]; 
+};
+
+struct truco_choices {
+  size_t size;
+  truco_command values[TRUCO_MAX_CHOICES];
 };
 
 struct truco_state {
   size_t players;
   size_t current_player;
   size_t score[TRUCO_MAX_TEAMS];
-
   size_t current_round;
   truco_round round;
-
-  truco_command choices[TRUCO_MAX_CHOICES];
-  size_t choices_size;
+  truco_choices choices;
 };
 
 static
 void truco_init(truco_state* state, size_t const players) {
   *state = (truco_state){
     .players = players,
-    .choices = {start_round},
-    .choices_size = 1,
+    .choices = (truco_choices){
+      .values = {start_round},
+      .size = 1,
+    }
   };
 }
 
@@ -69,7 +72,24 @@ void truco_start_round(truco_state* state) {
   state->current_round++;
   state->round = (truco_round){0};
   truco_deal_hands(state);
+  state->choices = (truco_choices){
+    .values = {play_first, play_second, play_third, call_envido, call_truco, surrender},
+    .size = 6
+  };
 }
+
+void truco_dump(truco_state* state) {
+  printf("{\n"
+      "Players: %lu\n"
+      "Score: %lu - %lu\n"
+      "Current player: %lu\n"
+      "Current round: %lu\n"
+      "}\n",
+      state->players,
+      state->score[0], state->score[1],
+      state->current_player,
+      state->current_round);
+};
 
 void truco_dispatch(truco_state* state, truco_command const command) {
   if (!state) return;
