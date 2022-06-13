@@ -4,6 +4,7 @@
 
 #include "libtruco.h"
 #include "card.c"
+#include "util.c"
 
 #define TRUCO_MAX_TEAMS 2
 #define TRUCO_MAX_PLAYERS 6
@@ -43,22 +44,41 @@ void truco_init(truco_state* state, size_t const players) {
 }
 
 static
+void truco_deal_hands(truco_state* state) {
+  int deck[truco_card_num];
+
+  for (size_t i = 0; i < truco_card_num; i++) {
+    deck[i] = i;
+  }
+
+  truco_shuffle(truco_card_num, deck);
+
+  for (size_t i = 0; i < state->players * TRUCO_HAND_SIZE; i++) {
+    size_t player = i % state->players;
+    size_t card = i / state->players;
+    state->round.hands[player][card] = (truco_playable_card){
+      .card = deck[i],
+      .played = false
+    };
+  }
+}
+
+static
 void truco_start_round(truco_state* state) {
   state->current_player = state->current_round % state->players;
   state->current_round++;
   state->round = (truco_round){0};
+  truco_deal_hands(state);
 }
 
 void truco_dispatch(truco_state* state, truco_command const command) {
   if (!state) return;
 
-  size_t players = 2;
-
   switch (command) {
-    case init_six: players = 6;
-    case init_four: players = 4;
     case init_two:
-      truco_init(state, players);
+    case init_four:
+    case init_six:
+      truco_init(state, 2 * (command + 1));
       break;
 
     case start_round:

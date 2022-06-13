@@ -45,15 +45,15 @@ enum truco_card {
   cups_10,
   cups_11,
   cups_12,
-  truco_card_size,
+  truco_card_num,
 };
 
 struct truco_card_def {
-  truco_card const id;
+  truco_card const card;
   size_t const power;
 };
 
-#define TRUCO_CARD_DEF(ID, POWER) { .id = (ID)+0, .power = (POWER)+0 }
+#define TRUCO_CARD_DEF(CARD, POWER) { .card = (CARD)+0, .power = (POWER)+0 }
 
 truco_card_def const truco_cards[] = {
   TRUCO_CARD_DEF(swords_1, 100),
@@ -114,6 +114,6 @@ truco_card_def const truco_cards[] = {
 };
 
 struct truco_playable_card {
-  truco_card id;
+  truco_card card;
   bool played;
 };
