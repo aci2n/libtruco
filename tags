@@ -11,7 +11,7 @@ OUTPUT_DIR	Makefile	/^OUTPUT_DIR = out$/;"	m
 SOURCES	Makefile	/^SOURCES = src\/*.c src\/*.h$/;"	m
 TEST_OUTPUT	Makefile	/^TEST_OUTPUT = $(OUTPUT_DIR)\/libtruco_test$/;"	m
 TEST_SOURCES	Makefile	/^TEST_SOURCES = test\/*.c$/;"	m
-TRUCO_CARD_DEF	src/card.c	56;"	d	file:
+TRUCO_CARD_DEF	src/card.c	55;"	d	file:
 TRUCO_HAND_SIZE	src/libtruco.c	12;"	d	file:
 TRUCO_MAX_CHOICES	src/libtruco.c	13;"	d	file:
 TRUCO_MAX_PLAYERS	src/libtruco.c	11;"	d	file:
@@ -24,53 +24,51 @@ call_real_envido	src/libtruco.h	/^  call_real_envido,$/;"	e	enum:truco_command
 call_retruco	src/libtruco.h	/^  call_retruco,$/;"	e	enum:truco_command
 call_truco	src/libtruco.h	/^  call_truco,$/;"	e	enum:truco_command
 call_vale_cuatro	src/libtruco.h	/^  call_vale_cuatro,$/;"	e	enum:truco_command
-card	src/card.c	/^  truco_card card;$/;"	m	struct:truco_playable_card	file:
 choices	src/libtruco.c	/^  truco_choices choices;$/;"	m	struct:truco_state	file:
-clubs_1	src/card.c	/^  clubs_1,$/;"	e	enum:truco_card	file:
-clubs_10	src/card.c	/^  clubs_10,$/;"	e	enum:truco_card	file:
-clubs_11	src/card.c	/^  clubs_11,$/;"	e	enum:truco_card	file:
-clubs_12	src/card.c	/^  clubs_12,$/;"	e	enum:truco_card	file:
-clubs_2	src/card.c	/^  clubs_2,$/;"	e	enum:truco_card	file:
-clubs_3	src/card.c	/^  clubs_3,$/;"	e	enum:truco_card	file:
-clubs_4	src/card.c	/^  clubs_4,$/;"	e	enum:truco_card	file:
-clubs_5	src/card.c	/^  clubs_5,$/;"	e	enum:truco_card	file:
-clubs_6	src/card.c	/^  clubs_6,$/;"	e	enum:truco_card	file:
-clubs_7	src/card.c	/^  clubs_7,$/;"	e	enum:truco_card	file:
-coins_1	src/card.c	/^  coins_1,$/;"	e	enum:truco_card	file:
-coins_10	src/card.c	/^  coins_10,$/;"	e	enum:truco_card	file:
-coins_11	src/card.c	/^  coins_11,$/;"	e	enum:truco_card	file:
-coins_12	src/card.c	/^  coins_12,$/;"	e	enum:truco_card	file:
-coins_2	src/card.c	/^  coins_2,$/;"	e	enum:truco_card	file:
-coins_3	src/card.c	/^  coins_3,$/;"	e	enum:truco_card	file:
-coins_4	src/card.c	/^  coins_4,$/;"	e	enum:truco_card	file:
-coins_5	src/card.c	/^  coins_5,$/;"	e	enum:truco_card	file:
-coins_6	src/card.c	/^  coins_6,$/;"	e	enum:truco_card	file:
-coins_7	src/card.c	/^  coins_7,$/;"	e	enum:truco_card	file:
-cups_1	src/card.c	/^  cups_1,$/;"	e	enum:truco_card	file:
-cups_10	src/card.c	/^  cups_10,$/;"	e	enum:truco_card	file:
-cups_11	src/card.c	/^  cups_11,$/;"	e	enum:truco_card	file:
-cups_12	src/card.c	/^  cups_12,$/;"	e	enum:truco_card	file:
-cups_2	src/card.c	/^  cups_2,$/;"	e	enum:truco_card	file:
-cups_3	src/card.c	/^  cups_3,$/;"	e	enum:truco_card	file:
-cups_4	src/card.c	/^  cups_4,$/;"	e	enum:truco_card	file:
-cups_5	src/card.c	/^  cups_5,$/;"	e	enum:truco_card	file:
-cups_6	src/card.c	/^  cups_6,$/;"	e	enum:truco_card	file:
-cups_7	src/card.c	/^  cups_7,$/;"	e	enum:truco_card	file:
+clubs_1	src/card.c	/^  clubs_1,$/;"	e	enum:truco_card_id	file:
+clubs_10	src/card.c	/^  clubs_10,$/;"	e	enum:truco_card_id	file:
+clubs_11	src/card.c	/^  clubs_11,$/;"	e	enum:truco_card_id	file:
+clubs_12	src/card.c	/^  clubs_12,$/;"	e	enum:truco_card_id	file:
+clubs_2	src/card.c	/^  clubs_2,$/;"	e	enum:truco_card_id	file:
+clubs_3	src/card.c	/^  clubs_3,$/;"	e	enum:truco_card_id	file:
+clubs_4	src/card.c	/^  clubs_4,$/;"	e	enum:truco_card_id	file:
+clubs_5	src/card.c	/^  clubs_5,$/;"	e	enum:truco_card_id	file:
+clubs_6	src/card.c	/^  clubs_6,$/;"	e	enum:truco_card_id	file:
+clubs_7	src/card.c	/^  clubs_7,$/;"	e	enum:truco_card_id	file:
+coins_1	src/card.c	/^  coins_1,$/;"	e	enum:truco_card_id	file:
+coins_10	src/card.c	/^  coins_10,$/;"	e	enum:truco_card_id	file:
+coins_11	src/card.c	/^  coins_11,$/;"	e	enum:truco_card_id	file:
+coins_12	src/card.c	/^  coins_12,$/;"	e	enum:truco_card_id	file:
+coins_2	src/card.c	/^  coins_2,$/;"	e	enum:truco_card_id	file:
+coins_3	src/card.c	/^  coins_3,$/;"	e	enum:truco_card_id	file:
+coins_4	src/card.c	/^  coins_4,$/;"	e	enum:truco_card_id	file:
+coins_5	src/card.c	/^  coins_5,$/;"	e	enum:truco_card_id	file:
+coins_6	src/card.c	/^  coins_6,$/;"	e	enum:truco_card_id	file:
+coins_7	src/card.c	/^  coins_7,$/;"	e	enum:truco_card_id	file:
+cups_1	src/card.c	/^  cups_1,$/;"	e	enum:truco_card_id	file:
+cups_10	src/card.c	/^  cups_10,$/;"	e	enum:truco_card_id	file:
+cups_11	src/card.c	/^  cups_11,$/;"	e	enum:truco_card_id	file:
+cups_12	src/card.c	/^  cups_12,$/;"	e	enum:truco_card_id	file:
+cups_2	src/card.c	/^  cups_2,$/;"	e	enum:truco_card_id	file:
+cups_3	src/card.c	/^  cups_3,$/;"	e	enum:truco_card_id	file:
+cups_4	src/card.c	/^  cups_4,$/;"	e	enum:truco_card_id	file:
+cups_5	src/card.c	/^  cups_5,$/;"	e	enum:truco_card_id	file:
+cups_6	src/card.c	/^  cups_6,$/;"	e	enum:truco_card_id	file:
+cups_7	src/card.c	/^  cups_7,$/;"	e	enum:truco_card_id	file:
 current_lap	src/libtruco.c	/^  size_t current_lap;$/;"	m	struct:truco_round	file:
 current_player	src/libtruco.c	/^  size_t current_player;$/;"	m	struct:truco_state	file:
 current_round	src/libtruco.c	/^  size_t current_round;$/;"	m	struct:truco_state	file:
-deck	src/libtruco.c	/^  truco_card deck[truco_card_num];$/;"	m	struct:truco_state	file:
+deck	src/libtruco.c	/^  truco_card const* deck[truco_card_num];$/;"	m	struct:truco_state	file:
 drew_first	src/libtruco.c	/^  bool drew_first;$/;"	m	struct:truco_round	file:
-hands	src/libtruco.c	/^  truco_playable_card hands[TRUCO_MAX_PLAYERS][TRUCO_HAND_SIZE];$/;"	m	struct:truco_round	file:
+hands	src/libtruco.c	/^  truco_card const* hands[TRUCO_MAX_PLAYERS][TRUCO_HAND_SIZE];$/;"	m	struct:truco_round	file:
 laps	src/libtruco.c	/^  truco_lap laps[TRUCO_HAND_SIZE];$/;"	m	struct:truco_round	file:
 main	test/libtruco_test.c	/^int main(int const argc, char const*const argv[static argc + 1]) {$/;"	f
-name	src/card.c	/^  char const*const name;$/;"	m	struct:truco_card_def	file:
+name	src/card.c	/^  char const*const name;$/;"	m	struct:truco_card	file:
 play_first	src/libtruco.h	/^  play_first,$/;"	e	enum:truco_command
 play_second	src/libtruco.h	/^  play_second,$/;"	e	enum:truco_command
 play_third	src/libtruco.h	/^  play_third,$/;"	e	enum:truco_command
-played	src/card.c	/^  bool played;$/;"	m	struct:truco_playable_card	file:
 players	src/libtruco.c	/^  size_t players;$/;"	m	struct:truco_state	file:
-power	src/card.c	/^  size_t const power;$/;"	m	struct:truco_card_def	file:
+power	src/card.c	/^  size_t const power;$/;"	m	struct:truco_card	file:
 reject_envido	src/libtruco.h	/^  reject_envido,$/;"	e	enum:truco_command
 reject_truco	src/libtruco.h	/^  reject_truco,$/;"	e	enum:truco_command
 round	src/libtruco.c	/^  truco_round round;$/;"	m	struct:truco_state	file:
@@ -78,29 +76,30 @@ score	src/libtruco.c	/^  size_t score[TRUCO_MAX_TEAMS];$/;"	m	struct:truco_round
 score	src/libtruco.c	/^  size_t score[TRUCO_MAX_TEAMS];$/;"	m	struct:truco_state	file:
 size	src/libtruco.c	/^  size_t size;$/;"	m	struct:truco_choices	file:
 size	src/libtruco.c	/^  size_t size;$/;"	m	struct:truco_lap	file:
-stack	src/libtruco.c	/^  truco_card stack[TRUCO_MAX_PLAYERS];$/;"	m	struct:truco_lap	file:
+stack	src/libtruco.c	/^  truco_card const* stack[TRUCO_MAX_PLAYERS];$/;"	m	struct:truco_lap	file:
 start_game_four	src/libtruco.h	/^  start_game_four = 1,$/;"	e	enum:truco_command
 start_game_six	src/libtruco.h	/^  start_game_six = 2,$/;"	e	enum:truco_command
 start_game_two	src/libtruco.h	/^  start_game_two = 0,$/;"	e	enum:truco_command
-strongest_card	src/libtruco.c	/^  truco_card strongest_card[TRUCO_MAX_TEAMS];$/;"	m	struct:truco_lap	file:
+strongest_card	src/libtruco.c	/^  truco_card const* strongest_card[TRUCO_MAX_TEAMS];$/;"	m	struct:truco_lap	file:
 surrender	src/libtruco.h	/^  surrender,$/;"	e	enum:truco_command
-swords_1	src/card.c	/^  swords_1,$/;"	e	enum:truco_card	file:
-swords_10	src/card.c	/^  swords_10,$/;"	e	enum:truco_card	file:
-swords_11	src/card.c	/^  swords_11,$/;"	e	enum:truco_card	file:
-swords_12	src/card.c	/^  swords_12,$/;"	e	enum:truco_card	file:
-swords_2	src/card.c	/^  swords_2,$/;"	e	enum:truco_card	file:
-swords_3	src/card.c	/^  swords_3,$/;"	e	enum:truco_card	file:
-swords_4	src/card.c	/^  swords_4,$/;"	e	enum:truco_card	file:
-swords_5	src/card.c	/^  swords_5,$/;"	e	enum:truco_card	file:
-swords_6	src/card.c	/^  swords_6,$/;"	e	enum:truco_card	file:
-swords_7	src/card.c	/^  swords_7,$/;"	e	enum:truco_card	file:
+swords_1	src/card.c	/^  swords_1,$/;"	e	enum:truco_card_id	file:
+swords_10	src/card.c	/^  swords_10,$/;"	e	enum:truco_card_id	file:
+swords_11	src/card.c	/^  swords_11,$/;"	e	enum:truco_card_id	file:
+swords_12	src/card.c	/^  swords_12,$/;"	e	enum:truco_card_id	file:
+swords_2	src/card.c	/^  swords_2,$/;"	e	enum:truco_card_id	file:
+swords_3	src/card.c	/^  swords_3,$/;"	e	enum:truco_card_id	file:
+swords_4	src/card.c	/^  swords_4,$/;"	e	enum:truco_card_id	file:
+swords_5	src/card.c	/^  swords_5,$/;"	e	enum:truco_card_id	file:
+swords_6	src/card.c	/^  swords_6,$/;"	e	enum:truco_card_id	file:
+swords_7	src/card.c	/^  swords_7,$/;"	e	enum:truco_card_id	file:
 truco_advance_round	src/libtruco.c	/^void truco_advance_round(truco_state* state) {$/;"	f	file:
-truco_card	src/card.c	/^enum truco_card {$/;"	g	file:
-truco_card	src/card.c	/^typedef enum truco_card truco_card;$/;"	t	typeref:enum:truco_card	file:
-truco_card_def	src/card.c	/^struct truco_card_def {$/;"	s	file:
-truco_card_def	src/card.c	/^typedef struct truco_card_def truco_card_def;$/;"	t	typeref:struct:truco_card_def	file:
-truco_card_num	src/card.c	/^  truco_card_num,$/;"	e	enum:truco_card	file:
-truco_cards	src/card.c	/^truco_card_def const truco_cards[] = {$/;"	v
+truco_card	src/card.c	/^struct truco_card {$/;"	s	file:
+truco_card	src/card.c	/^typedef struct truco_card truco_card;$/;"	t	typeref:struct:truco_card	file:
+truco_card_id	src/card.c	/^enum truco_card_id {$/;"	g	file:
+truco_card_id	src/card.c	/^typedef enum truco_card_id truco_card_id;$/;"	t	typeref:enum:truco_card_id	file:
+truco_card_num	src/card.c	/^  truco_card_num,$/;"	e	enum:truco_card_id	file:
+truco_card_num	src/card.c	/^static_assert(sizeof(truco_cards) \/ sizeof(truco_cards[0]) == truco_card_num);$/;"	v
+truco_cards	src/card.c	/^truco_card const truco_cards[] = {$/;"	v
 truco_choices	src/libtruco.c	/^struct truco_choices {$/;"	s	file:
 truco_choices	src/libtruco.c	/^typedef struct truco_choices truco_choices;$/;"	t	typeref:struct:truco_choices	file:
 truco_command	src/libtruco.h	/^enum truco_command {$/;"	g
@@ -114,11 +113,9 @@ truco_get_team	src/libtruco.c	/^size_t truco_get_team(size_t player) {$/;"	f	fil
 truco_lap	src/libtruco.c	/^struct truco_lap {$/;"	s	file:
 truco_lap	src/libtruco.c	/^typedef struct truco_lap truco_lap;$/;"	t	typeref:struct:truco_lap	file:
 truco_play_card	src/libtruco.c	/^void truco_play_card(truco_state* state, size_t i) {$/;"	f	file:
-truco_playable_card	src/card.c	/^struct truco_playable_card {$/;"	s	file:
-truco_playable_card	src/card.c	/^typedef struct truco_playable_card truco_playable_card;$/;"	t	typeref:struct:truco_playable_card	file:
 truco_round	src/libtruco.c	/^struct truco_round {$/;"	s	file:
 truco_round	src/libtruco.c	/^typedef struct truco_round truco_round;$/;"	t	typeref:struct:truco_round	file:
-truco_shuffle	src/util.c	/^void truco_shuffle(size_t size, int arr[static size]) {$/;"	f
+truco_shuffle	src/util.c	/^void truco_shuffle(size_t size, truco_card const* deck[static size]) {$/;"	f
 truco_start_game	src/libtruco.c	/^void truco_start_game(truco_state* state, size_t const players) {$/;"	f	file:
 truco_start_round	src/libtruco.c	/^void truco_start_round(truco_state* state) {$/;"	f	file:
 truco_state	src/libtruco.c	/^struct truco_state {$/;"	s	file:
