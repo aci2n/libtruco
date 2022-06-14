@@ -15,6 +15,7 @@ TRUCO_CARD_DEF	src/card.c	55;"	d	file:
 TRUCO_HAND_SIZE	src/libtruco.c	12;"	d	file:
 TRUCO_MAX_CHOICES	src/libtruco.c	13;"	d	file:
 TRUCO_MAX_PLAYERS	src/libtruco.c	11;"	d	file:
+TRUCO_MAX_ROUNDS	src/libtruco.c	14;"	d	file:
 TRUCO_MAX_TEAMS	src/libtruco.c	10;"	d	file:
 advance_round	src/libtruco.h	/^  advance_round,$/;"	e	enum:truco_command
 bonus	src/libtruco.c	/^  size_t bonus;$/;"	m	struct:truco_round	file:
@@ -55,13 +56,12 @@ cups_4	src/card.c	/^  cups_4,$/;"	e	enum:truco_card_id	file:
 cups_5	src/card.c	/^  cups_5,$/;"	e	enum:truco_card_id	file:
 cups_6	src/card.c	/^  cups_6,$/;"	e	enum:truco_card_id	file:
 cups_7	src/card.c	/^  cups_7,$/;"	e	enum:truco_card_id	file:
-current_lap	src/libtruco.c	/^  size_t current_lap;$/;"	m	struct:truco_round	file:
 current_player	src/libtruco.c	/^  size_t current_player;$/;"	m	struct:truco_state	file:
-current_round	src/libtruco.c	/^  size_t current_round;$/;"	m	struct:truco_state	file:
 deck	src/libtruco.c	/^  truco_card const* deck[truco_card_num];$/;"	m	struct:truco_state	file:
 drew_first	src/libtruco.c	/^  bool drew_first;$/;"	m	struct:truco_round	file:
 hands	src/libtruco.c	/^  truco_card const* hands[TRUCO_MAX_PLAYERS][TRUCO_HAND_SIZE];$/;"	m	struct:truco_round	file:
 laps	src/libtruco.c	/^  truco_lap laps[TRUCO_HAND_SIZE];$/;"	m	struct:truco_round	file:
+laps_size	src/libtruco.c	/^  size_t laps_size;$/;"	m	struct:truco_round	file:
 main	test/libtruco_test.c	/^int main(int const argc, char const*const argv[static argc + 1]) {$/;"	f
 name	src/card.c	/^  char const*const name;$/;"	m	struct:truco_card	file:
 play_first	src/libtruco.h	/^  play_first,$/;"	e	enum:truco_command
@@ -71,7 +71,8 @@ players	src/libtruco.c	/^  size_t players;$/;"	m	struct:truco_state	file:
 power	src/card.c	/^  size_t const power;$/;"	m	struct:truco_card	file:
 reject_envido	src/libtruco.h	/^  reject_envido,$/;"	e	enum:truco_command
 reject_truco	src/libtruco.h	/^  reject_truco,$/;"	e	enum:truco_command
-round	src/libtruco.c	/^  truco_round round;$/;"	m	struct:truco_state	file:
+rounds	src/libtruco.c	/^  truco_round rounds[TRUCO_MAX_ROUNDS];$/;"	m	struct:truco_state	file:
+rounds_size	src/libtruco.c	/^  size_t rounds_size;$/;"	m	struct:truco_state	file:
 score	src/libtruco.c	/^  size_t score[TRUCO_MAX_TEAMS];$/;"	m	struct:truco_round	file:
 score	src/libtruco.c	/^  size_t score[TRUCO_MAX_TEAMS];$/;"	m	struct:truco_state	file:
 size	src/libtruco.c	/^  size_t size;$/;"	m	struct:truco_choices	file:

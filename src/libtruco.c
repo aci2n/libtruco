@@ -12,11 +12,12 @@
 #define TRUCO_HAND_SIZE 3
 #define TRUCO_MAX_CHOICES 128
 #define TRUCO_MAX_ROUNDS 128
+#define DUMP_SEP "--------\n"
 
 typedef struct truco_lap truco_lap;
 struct truco_lap {
-  size_t size;
   truco_card const* strongest_card[TRUCO_MAX_TEAMS];
+  size_t stack_size;
   truco_card const* stack[TRUCO_MAX_PLAYERS];
 };
 
@@ -60,8 +61,12 @@ void truco_deal_hands(truco_state* state) {
 }
 
 static
-void truco_start_round(truco_state* state) {
-  state->rounds_size++;
+void truco_advance_round(truco_state* state) {
+  truco_round* round = &(state->rounds[state->rounds_size++]);
+
+  state->current_player = (state->rounds_size - 1) % state->players;
+  round->laps_size = 1;
+  round->bonus = 1;
   truco_deal_hands(state);
   state->choices = (truco_choices){
     .size = 6,
@@ -75,13 +80,7 @@ void truco_start_game(truco_state* state, size_t const players) {
   for (size_t i = 0; i < truco_card_num; i++) {
     state->deck[i] = &(truco_cards[i]);
   }
-  truco_start_round(state);
-}
-
-static
-void truco_advance_round(truco_state* state) {
-  state->current_player = state->rounds_size % state->players;
-  truco_start_round(state);
+  truco_advance_round(state);
 }
 
 static
@@ -102,12 +101,14 @@ void truco_compute_round_end(truco_state* state) {
 }
 
 static
-void truco_play_card(truco_state* state, size_t i) {
+void truco_play_card(truco_state* state, size_t card_index) {
+  assert(card_index >= 0 && card_index <= 2);
+
   size_t current_player = state->current_player;
   truco_round* round = &(state->rounds[state->rounds_size - 1]);
   truco_lap* lap = &(round->laps[round->laps_size - 1]);
   truco_card const** hand = round->hands[current_player];
-  truco_card const* card = hand[i];
+  truco_card const* card = hand[card_index];
   size_t team = truco_get_team(current_player);
 
   assert(card);
@@ -116,10 +117,10 @@ void truco_play_card(truco_state* state, size_t i) {
     lap->strongest_card[team] = card;
   }
 
-  hand[i] = 0;
-  lap->stack[lap->size++] = card;
+  hand[card_index] = 0;
+  lap->stack[lap->stack_size++] = card;
 
-  if (lap->size == state->players) {
+  if (lap->stack_size == state->players) {
     size_t strongest_0 = lap->strongest_card[0]->power;
     size_t strongest_1 = lap->strongest_card[1]->power;
 
@@ -142,42 +143,47 @@ void truco_play_card(truco_state* state, size_t i) {
 }
 
 void truco_dump(truco_state* state) {
-  printf("{\n");
-  printf(" Players: %lu\n", state->players);
-  printf(" Score: %lu - %lu\n", state->score[0], state->score[1]);
-  printf(" Current player: %lu\n", state->current_player);
-  printf(" Current round: %lu {\n", state->rounds_size - 1);
+  printf(DUMP_SEP);
+  printf("Players: %lu\n", state->players);
+  printf("Score: %lu - %lu\n", state->score[0], state->score[1]);
+  printf("Current player: %lu\n", state->current_player);
+  printf("Rounds (%lu):\n", state->rounds_size);
 
-  truco_round* round = &(state->rounds[state->rounds_size - 1]);
+  for (size_t round_index = 0; round_index < state->rounds_size; round_index++) {
+    truco_round* round = &(state->rounds[round_index]);
 
-  printf("  Score: %lu - %lu\n", round->score[0], round->score[1]);
-  printf("  Bonus: %lu\n", round->bonus);
-  printf("  Drew first: %u\n", round->drew_first);
+    printf(" " DUMP_SEP);
+    printf(" Round index: %lu\n", round_index);
+    printf(" Score: %lu - %lu\n", round->score[0], round->score[1]);
+    printf(" Bonus: %lu\n", round->bonus);
+    printf(" Drew first: %u\n", round->drew_first);
 
-  for (size_t i = 0; i < state->players; i++) {
-    truco_card const** hand = round->hands[i];
-    printf("  Player %lu: [ ", i);
+    for (size_t player_index = 0; player_index < state->players; player_index++) {
+      truco_card const** hand = round->hands[player_index];
+      printf(" Player %lu: [ ", player_index);
 
-    for (size_t j = 0; j < TRUCO_HAND_SIZE; j++) {
-      truco_card const* card = hand[j];
-      printf("%s ", card ? card->name : "X");
+      for (size_t card_index = 0; card_index < TRUCO_HAND_SIZE; card_index++) {
+        truco_card const* card = hand[card_index];
+        printf("%s ", card ? card->name : "X");
+      }
+
+      printf("]\n");
     }
 
-    printf("]\n");
-  }
+    printf(" Laps (%lu):\n", round->laps_size);
+    for (size_t lap_index = 0; lap_index < round->laps_size; lap_index++) {
+      truco_lap* lap = &(round->laps[lap_index]);
+      truco_card const* strongest_0 = lap->strongest_card[0];
+      truco_card const* strongest_1 = lap->strongest_card[1];
 
-  printf("  Laps: [ ");
-  for (size_t i = 0; i < round->laps_size; i++) {
-    truco_lap* lap = &(round->laps[i]);
-    printf("   {\n");
-    printf("    Size: %lu\n", lap->size);
-    printf("    Strongest card: %s - %s\n", lap->strongest_card[0]->name, lap->strongest_card[1]->name);
-    printf("   }\n");
+      printf("  " DUMP_SEP);
+      printf("  Lap index: %lu\n", lap_index);
+      printf("  Stack size: %lu\n", lap->stack_size);
+      printf("  Strongest card: %s - %s\n", 
+          strongest_0 ? strongest_0->name : "X",
+          strongest_1 ? strongest_1->name : "X");
+    }
   }
-  printf("]\n");
-
-  printf(" }\n");
-  printf("}\n");
 };
 
 void truco_dispatch(truco_state* state, truco_command const command) {
