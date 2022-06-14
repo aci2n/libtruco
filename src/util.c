@@ -2,7 +2,7 @@
 #include <time.h>
 #include <stdbool.h>
 
-void truco_shuffle(size_t size, int arr[static size]) {
+void truco_shuffle(size_t size, truco_card const* deck[static size]) {
   static bool seeded = false;
 
   if (!seeded) {
@@ -11,9 +11,9 @@ void truco_shuffle(size_t size, int arr[static size]) {
   }
 
   for (size_t i = 0; i < size; i++) {
-    int t = arr[i];
-    int r = rand() % size;
-    arr[i] = arr[r];
-    arr[r] = t;
+    truco_card const* temp = deck[i];
+    int j = rand() % size;
+    deck[i] = deck[j];
+    deck[j] = temp;
   }
 }

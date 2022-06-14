@@ -1,10 +1,8 @@
 #include <stdbool.h>
+#include <assert.h>
 
-typedef enum truco_card truco_card;
-typedef struct truco_card_def truco_card_def;
-typedef struct truco_playable_card truco_playable_card;
-
-enum truco_card {
+typedef enum truco_card_id truco_card_id;
+enum truco_card_id {
   swords_1,
   swords_2,
   swords_3,
@@ -48,14 +46,15 @@ enum truco_card {
   truco_card_num,
 };
 
-struct truco_card_def {
+typedef struct truco_card truco_card;
+struct truco_card {
   size_t const power;
   char const*const name;
 };
 
-#define TRUCO_CARD_DEF(CARD, POWER) [(CARD)+0] = { .power = (POWER)+0, .name = "" #CARD "" }
+#define TRUCO_CARD_DEF(ID, POWER) [(ID)+0] = { .power = (POWER)+0, .name = "" #ID "" }
 
-truco_card_def const truco_cards[] = {
+truco_card const truco_cards[] = {
   TRUCO_CARD_DEF(swords_1, 100),
 
   TRUCO_CARD_DEF(clubs_1, 99),
@@ -113,7 +112,4 @@ truco_card_def const truco_cards[] = {
   TRUCO_CARD_DEF(cups_4, 87),
 };
 
-struct truco_playable_card {
-  truco_card card;
-  bool played;
-};
+static_assert(sizeof(truco_cards) / sizeof(truco_cards[0]) == truco_card_num);

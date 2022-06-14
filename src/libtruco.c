@@ -13,24 +13,23 @@
 #define TRUCO_MAX_CHOICES 128
 
 typedef struct truco_lap truco_lap;
-typedef struct truco_round truco_round;
-typedef struct truco_choices truco_choices;
-
 struct truco_lap {
   size_t size;
-  truco_card strongest_card[TRUCO_MAX_TEAMS];
-  truco_card stack[TRUCO_MAX_PLAYERS];
+  truco_card const* strongest_card[TRUCO_MAX_TEAMS];
+  truco_card const* stack[TRUCO_MAX_PLAYERS];
 };
 
+typedef struct truco_round truco_round;
 struct truco_round {
   size_t score[TRUCO_MAX_TEAMS];
-  truco_playable_card hands[TRUCO_MAX_PLAYERS][TRUCO_HAND_SIZE];
+  truco_card const* hands[TRUCO_MAX_PLAYERS][TRUCO_HAND_SIZE];
   size_t current_lap;
   truco_lap laps[TRUCO_HAND_SIZE];
   bool drew_first;
   size_t bonus;
 };
 
+typedef struct truco_choices truco_choices;
 struct truco_choices {
   size_t size;
   truco_command values[TRUCO_MAX_CHOICES];
@@ -43,20 +42,17 @@ struct truco_state {
   size_t current_round;
   truco_round round;
   truco_choices choices;
-  truco_card deck[truco_card_num];
+  truco_card const* deck[truco_card_num];
 };
 
 static
 void truco_deal_hands(truco_state* state) {
-  truco_shuffle(truco_card_num, (int*)state->deck);
+  truco_shuffle(truco_card_num, state->deck);
 
   for (size_t i = 0; i < state->players * TRUCO_HAND_SIZE; i++) {
     size_t player = i % state->players;
     size_t card = i / state->players;
-    state->round.hands[player][card] = (truco_playable_card){
-      .card = state->deck[i],
-      .played = false
-    };
+    state->round.hands[player][card] = state->deck[i];
   }
 }
 
@@ -73,7 +69,7 @@ static
 void truco_start_game(truco_state* state, size_t const players) {
   *state = (truco_state){.players = players};
   for (size_t i = 0; i < truco_card_num; i++) {
-    state->deck[i] = i;
+    state->deck[i] = &(truco_cards[i]);
   }
   truco_start_round(state);
 }
@@ -105,23 +101,25 @@ void truco_compute_round_end(truco_state* state) {
 
 static
 void truco_play_card(truco_state* state, size_t i) {
+  size_t current_player = state->current_player;
   truco_round* round = &(state->round);
   truco_lap* lap = &(round->laps[round->current_lap]);
-  truco_playable_card* playable = &(round->hands[state->current_player][i]);
-  size_t team = truco_get_team(state->current_player);
+  truco_card const** hand = round->hands[current_player];
+  truco_card const* card = hand[i];
+  size_t team = truco_get_team(current_player);
 
-  assert(!playable->played);
-  
-  if (truco_cards[playable->card].power > truco_cards[lap->strongest_card[team]].power) {
-    lap->strongest_card[team] = playable->card;
+  assert(card);
+
+  if (!lap->strongest_card[team] || card->power > lap->strongest_card[team]->power) {
+    lap->strongest_card[team] = card;
   }
 
-  playable->played = true;
-  lap->stack[lap->size++] = playable->card;
+  hand[i] = 0;
+  lap->stack[lap->size++] = card;
 
   if (lap->size == state->players) {
-    size_t strongest_0 = truco_cards[lap->strongest_card[0]].power;
-    size_t strongest_1 = truco_cards[lap->strongest_card[1]].power;
+    size_t strongest_0 = lap->strongest_card[0]->power;
+    size_t strongest_1 = lap->strongest_card[1]->power;
 
     if (strongest_0 > strongest_1) {
       round->score[0]++;
@@ -155,13 +153,12 @@ void truco_dump(truco_state* state) {
   printf("  Drew first: %u\n", round.drew_first);
 
   for (size_t i = 0; i < state->players; i++) {
-    truco_playable_card* hand = round.hands[i];
+    truco_card const** hand = round.hands[i];
     printf("  Player %lu: [ ", i);
 
     for (size_t j = 0; j < TRUCO_HAND_SIZE; j++) {
-      truco_playable_card playable = hand[j];
-      truco_card_def def = truco_cards[playable.card];
-      printf("%s ", def.name);
+      truco_card const* card = hand[j];
+      printf("%s ", card ? card->name : "X");
     }
 
     printf("]\n");
@@ -172,9 +169,7 @@ void truco_dump(truco_state* state) {
     truco_lap* lap = &(round.laps[i]);
     printf("   {\n");
     printf("    Size: %lu\n", lap->size);
-    printf("    Strongest card: %s - %s\n", 
-        truco_cards[lap->strongest_card[0]].name,
-        truco_cards[lap->strongest_card[1]].name);
+    printf("    Strongest card: %s - %s\n", lap->strongest_card[0]->name, lap->strongest_card[1]->name);
     printf("   }\n");
   }
   printf("]\n");
