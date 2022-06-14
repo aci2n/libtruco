@@ -6,19 +6,22 @@
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
 CC	Makefile	/^CC = gcc$/;"	m
 CFLAGS	Makefile	/^CFLAGS = -g$/;"	m
+DEBUG	src/libtruco.c	16;"	d	file:
+DISPATCH	test/libtruco_test.c	10;"	d	file:
 DUMP_SEP	src/libtruco.c	15;"	d	file:
 OUTPUT	Makefile	/^OUTPUT = $(OUTPUT_DIR)\/libtruco.o$/;"	m
 OUTPUT_DIR	Makefile	/^OUTPUT_DIR = out$/;"	m
+PRINTD	src/libtruco.c	17;"	d	file:
 SOURCES	Makefile	/^SOURCES = src\/*.c src\/*.h$/;"	m
 TEST_OUTPUT	Makefile	/^TEST_OUTPUT = $(OUTPUT_DIR)\/libtruco_test$/;"	m
 TEST_SOURCES	Makefile	/^TEST_SOURCES = test\/*.c$/;"	m
 TRUCO_CARD_DEF	src/card.c	55;"	d	file:
+TRUCO_COMMAND	src/util.c	27;"	d	file:
 TRUCO_HAND_SIZE	src/libtruco.c	12;"	d	file:
 TRUCO_MAX_CHOICES	src/libtruco.c	13;"	d	file:
 TRUCO_MAX_PLAYERS	src/libtruco.c	11;"	d	file:
 TRUCO_MAX_ROUNDS	src/libtruco.c	14;"	d	file:
 TRUCO_MAX_TEAMS	src/libtruco.c	10;"	d	file:
-advance_round	src/libtruco.h	/^  advance_round,$/;"	e	enum:truco_command
 bonus	src/libtruco.c	/^  size_t bonus;$/;"	m	struct:truco_round	file:
 call_envido	src/libtruco.h	/^  call_envido,$/;"	e	enum:truco_command
 call_falta_envido	src/libtruco.h	/^  call_falta_envido,$/;"	e	enum:truco_command
@@ -47,6 +50,7 @@ coins_4	src/card.c	/^  coins_4,$/;"	e	enum:truco_card_id	file:
 coins_5	src/card.c	/^  coins_5,$/;"	e	enum:truco_card_id	file:
 coins_6	src/card.c	/^  coins_6,$/;"	e	enum:truco_card_id	file:
 coins_7	src/card.c	/^  coins_7,$/;"	e	enum:truco_card_id	file:
+commands	src/libtruco.c	/^  truco_command commands[TRUCO_MAX_CHOICES];$/;"	m	struct:truco_choices	file:
 cups_1	src/card.c	/^  cups_1,$/;"	e	enum:truco_card_id	file:
 cups_10	src/card.c	/^  cups_10,$/;"	e	enum:truco_card_id	file:
 cups_11	src/card.c	/^  cups_11,$/;"	e	enum:truco_card_id	file:
@@ -65,9 +69,13 @@ laps	src/libtruco.c	/^  truco_lap laps[TRUCO_HAND_SIZE];$/;"	m	struct:truco_roun
 laps_size	src/libtruco.c	/^  size_t laps_size;$/;"	m	struct:truco_round	file:
 main	test/libtruco_test.c	/^int main(int const argc, char const*const argv[static argc + 1]) {$/;"	f
 name	src/card.c	/^  char const*const name;$/;"	m	struct:truco_card	file:
+name	src/util.c	/^  char const*const name;$/;"	m	struct:truco_command_def	file:
 play_first	src/libtruco.h	/^  play_first,$/;"	e	enum:truco_command
+play_first	test/libtruco_test.c	/^  DISPATCH(play_first);$/;"	v
 play_second	src/libtruco.h	/^  play_second,$/;"	e	enum:truco_command
+play_second	test/libtruco_test.c	/^  DISPATCH(play_second);$/;"	v
 play_third	src/libtruco.h	/^  play_third,$/;"	e	enum:truco_command
+play_third	test/libtruco_test.c	/^  DISPATCH(play_third);$/;"	v
 players	src/libtruco.c	/^  size_t players;$/;"	m	struct:truco_state	file:
 power	src/card.c	/^  size_t const power;$/;"	m	struct:truco_card	file:
 reject_envido	src/libtruco.h	/^  reject_envido,$/;"	e	enum:truco_command
@@ -79,9 +87,10 @@ score	src/libtruco.c	/^  size_t score[TRUCO_MAX_TEAMS];$/;"	m	struct:truco_state
 size	src/libtruco.c	/^  size_t size;$/;"	m	struct:truco_choices	file:
 stack	src/libtruco.c	/^  truco_card const* stack[TRUCO_MAX_PLAYERS];$/;"	m	struct:truco_lap	file:
 stack_size	src/libtruco.c	/^  size_t stack_size;$/;"	m	struct:truco_lap	file:
-start_game_four	src/libtruco.h	/^  start_game_four = 1,$/;"	e	enum:truco_command
-start_game_six	src/libtruco.h	/^  start_game_six = 2,$/;"	e	enum:truco_command
-start_game_two	src/libtruco.h	/^  start_game_two = 0,$/;"	e	enum:truco_command
+start_game_four	src/libtruco.h	/^  start_game_four,$/;"	e	enum:truco_command
+start_game_six	src/libtruco.h	/^  start_game_six,$/;"	e	enum:truco_command
+start_game_two	src/libtruco.h	/^  start_game_two,$/;"	e	enum:truco_command
+start_game_two	test/libtruco_test.c	/^  DISPATCH(start_game_two);$/;"	v
 strongest_card	src/libtruco.c	/^  truco_card const* strongest_card[TRUCO_MAX_TEAMS];$/;"	m	struct:truco_lap	file:
 surrender	src/libtruco.h	/^  surrender,$/;"	e	enum:truco_command
 swords_1	src/card.c	/^  swords_1,$/;"	e	enum:truco_card_id	file:
@@ -101,12 +110,17 @@ truco_card_id	src/card.c	/^enum truco_card_id {$/;"	g	file:
 truco_card_id	src/card.c	/^typedef enum truco_card_id truco_card_id;$/;"	t	typeref:enum:truco_card_id	file:
 truco_card_num	src/card.c	/^  truco_card_num,$/;"	e	enum:truco_card_id	file:
 truco_card_num	src/card.c	/^static_assert(sizeof(truco_cards) \/ sizeof(truco_cards[0]) == truco_card_num);$/;"	v
-truco_cards	src/card.c	/^truco_card const truco_cards[] = {$/;"	v
+truco_cards	src/card.c	/^static truco_card const truco_cards[] = {$/;"	v	file:
 truco_choices	src/libtruco.c	/^struct truco_choices {$/;"	s	file:
 truco_choices	src/libtruco.c	/^typedef struct truco_choices truco_choices;$/;"	t	typeref:struct:truco_choices	file:
 truco_command	src/libtruco.h	/^enum truco_command {$/;"	g
 truco_command	src/libtruco.h	/^typedef enum truco_command truco_command;$/;"	t	typeref:enum:truco_command
+truco_command_def	src/util.c	/^struct truco_command_def {$/;"	s	file:
+truco_command_def	src/util.c	/^typedef struct truco_command_def truco_command_def;$/;"	t	typeref:struct:truco_command_def	file:
+truco_command_defs	src/util.c	/^static truco_command_def const truco_command_defs[] = {$/;"	v	file:
+truco_command_name	src/util.c	/^char const*const truco_command_name(truco_command command) {$/;"	f
 truco_command_num	src/libtruco.h	/^  truco_command_num,$/;"	e	enum:truco_command
+truco_command_num	src/util.c	/^static_assert(sizeof(truco_command_defs) \/ sizeof(truco_command_defs[0]) == truco_command_num);$/;"	v
 truco_compute_round_end	src/libtruco.c	/^void truco_compute_round_end(truco_state* state) {$/;"	f	file:
 truco_deal_hands	src/libtruco.c	/^void truco_deal_hands(truco_state* state) {$/;"	f	file:
 truco_dispatch	src/libtruco.c	/^void truco_dispatch(truco_state* state, truco_command const command) {$/;"	f
@@ -121,4 +135,3 @@ truco_shuffle	src/util.c	/^void truco_shuffle(size_t size, truco_card const* dec
 truco_start_game	src/libtruco.c	/^void truco_start_game(truco_state* state, size_t const players) {$/;"	f	file:
 truco_state	src/libtruco.c	/^struct truco_state {$/;"	s	file:
 truco_state	src/libtruco.h	/^typedef struct truco_state truco_state;$/;"	t	typeref:struct:truco_state
-values	src/libtruco.c	/^  truco_command values[TRUCO_MAX_CHOICES];$/;"	m	struct:truco_choices	file:

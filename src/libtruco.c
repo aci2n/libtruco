@@ -91,6 +91,12 @@ size_t truco_get_team(size_t player) {
   return player % 2;
 }
 
+inline
+static
+size_t truco_get_foot(truco_state* state) {
+  return (state->rounds_size + state->players - 2) % state->players;
+}
+
 static
 void truco_compute_round_end(truco_state* state) {
   truco_round* round = &(state->rounds[state->rounds_size - 1]);
@@ -165,6 +171,21 @@ void truco_play_card(truco_state* state, size_t card_index) {
   }
 }
 
+static
+void truco_call_truco(truco_state* state, size_t bonus) {
+  truco_choices* choices = &(state->choices);
+
+  state->current_player = truco_get_foot(state);
+  *choices = (truco_choices){
+    .size = 3,
+    .commands = {accept_truco, reject_truco, go_to_deck}
+  };
+
+  for (size_t i = bonus + 1; i < 3; i++) {
+    choices->commands[choices->size++] = call_truco + i;
+  }
+}
+
 void truco_dump(truco_state* state) {
   printf(DUMP_SEP);
   printf("Players: %lu\n", state->players);
@@ -223,7 +244,7 @@ void truco_dump(truco_state* state) {
   }
 };
 
-void truco_dispatch(truco_state* state, truco_command const command) {
+void truco_dispatch(truco_state* state, truco_command command) {
   if (!state) return;
 
   switch (command) {
@@ -237,6 +258,16 @@ void truco_dispatch(truco_state* state, truco_command const command) {
     case play_second:
     case play_third:
       truco_play_card(state, command - play_first);
+      break;
+
+    case call_truco:
+    case call_retruco:
+    case call_vale_cuatro:
+      truco_call_truco(state, command - call_truco);
+      break;
+
+    case accept_truco:
+      truco_accept_truco(state);
       break;
   }
 }
