@@ -6,6 +6,7 @@
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
 CC	Makefile	/^CC = gcc$/;"	m
 CFLAGS	Makefile	/^CFLAGS = -g$/;"	m
+DUMP_SEP	src/libtruco.c	15;"	d	file:
 OUTPUT	Makefile	/^OUTPUT = $(OUTPUT_DIR)\/libtruco.o$/;"	m
 OUTPUT_DIR	Makefile	/^OUTPUT_DIR = out$/;"	m
 SOURCES	Makefile	/^SOURCES = src\/*.c src\/*.h$/;"	m
@@ -76,8 +77,8 @@ rounds_size	src/libtruco.c	/^  size_t rounds_size;$/;"	m	struct:truco_state	file
 score	src/libtruco.c	/^  size_t score[TRUCO_MAX_TEAMS];$/;"	m	struct:truco_round	file:
 score	src/libtruco.c	/^  size_t score[TRUCO_MAX_TEAMS];$/;"	m	struct:truco_state	file:
 size	src/libtruco.c	/^  size_t size;$/;"	m	struct:truco_choices	file:
-size	src/libtruco.c	/^  size_t size;$/;"	m	struct:truco_lap	file:
 stack	src/libtruco.c	/^  truco_card const* stack[TRUCO_MAX_PLAYERS];$/;"	m	struct:truco_lap	file:
+stack_size	src/libtruco.c	/^  size_t stack_size;$/;"	m	struct:truco_lap	file:
 start_game_four	src/libtruco.h	/^  start_game_four = 1,$/;"	e	enum:truco_command
 start_game_six	src/libtruco.h	/^  start_game_six = 2,$/;"	e	enum:truco_command
 start_game_two	src/libtruco.h	/^  start_game_two = 0,$/;"	e	enum:truco_command
@@ -113,12 +114,11 @@ truco_dump	src/libtruco.c	/^void truco_dump(truco_state* state) {$/;"	f
 truco_get_team	src/libtruco.c	/^size_t truco_get_team(size_t player) {$/;"	f	file:
 truco_lap	src/libtruco.c	/^struct truco_lap {$/;"	s	file:
 truco_lap	src/libtruco.c	/^typedef struct truco_lap truco_lap;$/;"	t	typeref:struct:truco_lap	file:
-truco_play_card	src/libtruco.c	/^void truco_play_card(truco_state* state, size_t i) {$/;"	f	file:
+truco_play_card	src/libtruco.c	/^void truco_play_card(truco_state* state, size_t card_index) {$/;"	f	file:
 truco_round	src/libtruco.c	/^struct truco_round {$/;"	s	file:
 truco_round	src/libtruco.c	/^typedef struct truco_round truco_round;$/;"	t	typeref:struct:truco_round	file:
 truco_shuffle	src/util.c	/^void truco_shuffle(size_t size, truco_card const* deck[static size]) {$/;"	f
 truco_start_game	src/libtruco.c	/^void truco_start_game(truco_state* state, size_t const players) {$/;"	f	file:
-truco_start_round	src/libtruco.c	/^void truco_start_round(truco_state* state) {$/;"	f	file:
 truco_state	src/libtruco.c	/^struct truco_state {$/;"	s	file:
 truco_state	src/libtruco.h	/^typedef struct truco_state truco_state;$/;"	t	typeref:struct:truco_state
 values	src/libtruco.c	/^  truco_command values[TRUCO_MAX_CHOICES];$/;"	m	struct:truco_choices	file:

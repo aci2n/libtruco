@@ -2,10 +2,9 @@ typedef struct truco_state truco_state;
 typedef enum truco_command truco_command;
 
 enum truco_command {
-  start_game_two = 0,
-  start_game_four = 1,
-  start_game_six = 2,
-  advance_round,
+  start_game_two,
+  start_game_four,
+  start_game_six,
   play_first,
   play_second,
   play_third,

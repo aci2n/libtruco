@@ -13,6 +13,8 @@
 #define TRUCO_MAX_CHOICES 128
 #define TRUCO_MAX_ROUNDS 128
 #define DUMP_SEP "--------\n"
+#define DEBUG true
+#define PRINTD(X) do { print X; } while (false);
 
 typedef struct truco_lap truco_lap;
 struct truco_lap {
@@ -34,7 +36,7 @@ struct truco_round {
 typedef struct truco_choices truco_choices;
 struct truco_choices {
   size_t size;
-  truco_command values[TRUCO_MAX_CHOICES];
+  truco_command commands[TRUCO_MAX_CHOICES];
 };
 
 struct truco_state {
@@ -70,7 +72,7 @@ void truco_advance_round(truco_state* state) {
   truco_deal_hands(state);
   state->choices = (truco_choices){
     .size = 6,
-    .values = {play_first, play_second, play_third, call_envido, call_truco, surrender},
+    .commands = {play_first, play_second, play_third, call_envido, call_truco, surrender},
   };
 }
 
@@ -98,6 +100,8 @@ void truco_compute_round_end(truco_state* state) {
   } else if (round->score[1] > round->score[0]) {
     state->score[1] += round->bonus;
   }
+
+  truco_advance_round(state);
 }
 
 static
@@ -121,6 +125,8 @@ void truco_play_card(truco_state* state, size_t card_index) {
   lap->stack[lap->stack_size++] = card;
 
   if (lap->stack_size == state->players) {
+    assert(lap->strongest_card[0] && lap->strongest_card[1]);
+
     size_t strongest_0 = lap->strongest_card[0]->power;
     size_t strongest_1 = lap->strongest_card[1]->power;
 
@@ -136,8 +142,25 @@ void truco_play_card(truco_state* state, size_t card_index) {
 
     if ((round->drew_first && diff > 0) || diff > 1 || round->laps_size == 3) {
       truco_compute_round_end(state);
-    } else {
-      round->laps_size++;
+      return;
+    }
+
+    round->laps_size++;
+  }
+
+  state->current_player = (state->current_player + 1) % state->players;
+
+  truco_card const** next_hand = round->hands[state->current_player];
+  truco_choices* choices = &(state->choices);
+
+  *choices = (truco_choices){
+    .size = 1,
+    .commands = {surrender}
+  };
+
+  for (size_t i = 0; i < TRUCO_HAND_SIZE; i++) {
+    if (next_hand[i]) {
+      choices->commands[choices->size++] = play_first + i;
     }
   }
 }
@@ -147,6 +170,14 @@ void truco_dump(truco_state* state) {
   printf("Players: %lu\n", state->players);
   printf("Score: %lu - %lu\n", state->score[0], state->score[1]);
   printf("Current player: %lu\n", state->current_player);
+
+  truco_choices* choices = &(state->choices);
+  printf("Choices (%lu): [ ", choices->size);
+  for (size_t choice_index = 0; choice_index < choices->size; choice_index++) {
+    printf("%s ", truco_command_name(choices->commands[choice_index]));
+  }
+  printf("]\n");
+
   printf("Rounds (%lu):\n", state->rounds_size);
 
   for (size_t round_index = 0; round_index < state->rounds_size; round_index++) {
@@ -160,7 +191,7 @@ void truco_dump(truco_state* state) {
 
     for (size_t player_index = 0; player_index < state->players; player_index++) {
       truco_card const** hand = round->hands[player_index];
-      printf(" Player %lu: [ ", player_index);
+      printf(" Player %lu (team %lu): [ ", player_index, truco_get_team(player_index));
 
       for (size_t card_index = 0; card_index < TRUCO_HAND_SIZE; card_index++) {
         truco_card const* card = hand[card_index];
@@ -178,10 +209,16 @@ void truco_dump(truco_state* state) {
 
       printf("  " DUMP_SEP);
       printf("  Lap index: %lu\n", lap_index);
-      printf("  Stack size: %lu\n", lap->stack_size);
       printf("  Strongest card: %s - %s\n", 
           strongest_0 ? strongest_0->name : "X",
           strongest_1 ? strongest_1->name : "X");
+      printf("  Stack (%lu) [ ", lap->stack_size);
+      
+      for (size_t stack_index = 0; stack_index < lap->stack_size; stack_index++) {
+        printf("%s ", lap->stack[stack_index]->name);
+      }
+
+      printf("]\n");
     }
   }
 };
@@ -194,10 +231,6 @@ void truco_dispatch(truco_state* state, truco_command const command) {
     case start_game_four:
     case start_game_six:
       truco_start_game(state, 2 * (command + 1));
-      break;
-
-    case advance_round:
-      truco_advance_round(state);
       break;
 
     case play_first:

@@ -54,7 +54,7 @@ struct truco_card {
 
 #define TRUCO_CARD_DEF(ID, POWER) [(ID)+0] = { .power = (POWER)+0, .name = "" #ID "" }
 
-truco_card const truco_cards[] = {
+static truco_card const truco_cards[] = {
   TRUCO_CARD_DEF(swords_1, 100),
 
   TRUCO_CARD_DEF(clubs_1, 99),
